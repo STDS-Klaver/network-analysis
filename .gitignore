@@ -1,0 +1,8 @@
+# Data folder
+data/
+# Quarto files
+/.quarto/
+**/*.quarto_ipynb
+
+# R data files
+*.Rhistory
