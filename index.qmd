@@ -142,7 +142,7 @@ map_theme <- theme_void() +
 # 1. Individual plots
 p_degree <- ggplot(data = veloland_edges_enriched) +
   geom_sf(aes(color = degree_log1p, linewidth = degree_log1p), lineend = "round") +
-  scale_color_viridis_c(option = "plasma") +
+  scale_color_viridis_c(option = "viridis") +
   scale_linewidth_continuous(range = c(0.2, 1.0), guide = "none") +
   labs(
     title = "Degree Centrality",
@@ -164,7 +164,7 @@ p_closeness <- ggplot(data = veloland_edges_enriched) +
 
 p_betweenness <- ggplot(data = veloland_edges_enriched) +
   geom_sf(aes(color = betweenness_log1p, linewidth = betweenness_log1p), lineend = "round") +
-  scale_color_viridis_c(option = "magma") +
+  scale_color_viridis_c(option = "viridis") +
   scale_linewidth_continuous(range = c(0.2, 1.0), guide = "none") +
   labs(
     title = "Betweenness Centrality",
@@ -189,11 +189,9 @@ combined_plot
 ```
 
 ### Discussion
-The maps show clear spatial patterns across the Swiss cycle network.
+The centrality analysis of the Swiss cycle network reveals spatial patterns, some more clearer than others.Degree Centrality seems very similar for many of the edges. There is not much variation and I can't see any distinct patterns. The road sticking out the most is the "ring" in the north going around what i assume to be Basel. It has the highest degree centrality. Closeness centrality is highest on the Swiss Plateau (Mittelland), which sits more or less in the geographic center of the country and and holds a large part of the population. So both geographically and population density wise this can be expected and makes absolutely sense. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network. Similar to the degree map, betweenness has low variation with only a few single roads sticking out.
 
-Degree Centrality seems very similar for many of the edges. There is not much variation and I can't see any clear patterns. The high alue of the single road around Basel is very intersting. Closeness centrality is highest on the Swiss Plateau (Mittelland), which sits more or less in the geographic center of the country and and has holds a large part of the population. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network. Similar to the degree map, betweenn
-
-One clear limitation is that we used physical edge length as the only weight. In Switzerland, a 10 km flat road and a 10 km mountain pass are treated as equal, which they obviously aren't for a cyclist. Including elevation data (e.g., a digital elevation model) to estimate actual travel effort or time would give more realistic results. Another alternative would be to use actual cycling speed or infrastructure quality as weights. As a lesson learned, always think about whether distance alone is a meaningful cost in the context of your network.
+One clear limitation is that we used physical edge length as the only weight and therefore factors such as steepness are not considered. Including elevation data (e.g., a digital elevation model) to estimate actual travel effort or time would give more detailed results. Another alternative would be to use actual cycling speed or infrastructure quality as weights.
 
 ## Task 2: Routing
 In this task, you will do your do your own routing using the Veloland dataset from the previous task (locations.gpkg on moodle). Import the two datasets and convert the Veloland dataset to an undirected network using `sfnetworks`, as you did before.
@@ -286,8 +284,7 @@ ggplot() +
 ```
 
 ### Discussion
-The map shows shortest paths by length from one origin in the south (Ticino) to five destinations spread across the country. The routes follow the Veloland network and look geographically reasonable — they take logical corridors through the Alps rather than cutting straight lines across terrain.
-
-The main limitation here is the same as in Task 1: shortest by length is not the same as easiest or fastest. A route over the Gotthard is "short" on the map but very demanding in practice. An alternative would be to use a time- or effort-based weight instead of raw distance. Another limitation is that the routing is entirely dependent on the network being complete and connected — if a real road exists but is missing from the dataset, the algorithm cannot find it. As a lesson learned, the choice of weight has a big impact on which path the algorithm picks, and it is worth thinking carefully about what "shortest" should mean in context.
+The routing analysis successfully computes the shortest paths from a single origin to multiple destinations across the Swiss cycle network. The visualization clearly shows the main corridors connecting the origin to various points, with some routes sharing common segments, especially those heading towards the central and eastern parts of Switzerland. The use of edge length as weights ensures that the computed paths reflect actual travel distances, which is crucial for realistic routing. However, similar to the centrality analysis, this approach does not account for factors such as elevation changes or other factors. So for this sole purpose the analysise works well, but for more detailed routing recommendations, incorporating additional data (e.g., elevation, traffic conditions, or infrastructure quality) would improve the accuracy and relevance of the routes generated.
 
 ## Use of AI
+I tried to solve the tasks mostly without the help of AI, but I used Gemini correct my solutions and improve some of my code if I was stuck or unsure.

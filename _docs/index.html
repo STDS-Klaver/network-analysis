@@ -253,7 +253,7 @@ Projected CRS: CH1903+ / LV95</code></pre>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Individual plots</span></span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>p_degree <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> veloland_edges_enriched) <span class="sc">+</span></span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">color =</span> degree_log1p, <span class="at">linewidth =</span> degree_log1p), <span class="at">lineend =</span> <span class="st">"round"</span>) <span class="sc">+</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"plasma"</span>) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span></span>
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">1.0</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Degree Centrality"</span>,</span>
@@ -275,7 +275,7 @@ Projected CRS: CH1903+ / LV95</code></pre>
 <span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>p_betweenness <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> veloland_edges_enriched) <span class="sc">+</span></span>
 <span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">color =</span> betweenness_log1p, <span class="at">linewidth =</span> betweenness_log1p), <span class="at">lineend =</span> <span class="st">"round"</span>) <span class="sc">+</span></span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"magma"</span>) <span class="sc">+</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span></span>
 <span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linewidth_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">1.0</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
 <span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Betweenness Centrality"</span>,</span>
@@ -308,9 +308,8 @@ Projected CRS: CH1903+ / LV95</code></pre>
 </section>
 <section id="discussion" class="level3">
 <h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
-<p>The maps show clear spatial patterns across the Swiss cycle network.</p>
-<p>Degree Centrality seems very similar for many of the edges. There is not much variation and I can’t see any clear patterns. The high alue of the single road around Basel is very intersting. Closeness centrality is highest on the Swiss Plateau (Mittelland), which sits more or less in the geographic center of the country and and has holds a large part of the population. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network. Similar to the degree map, betweenn</p>
-<p>One clear limitation is that we used physical edge length as the only weight. In Switzerland, a 10 km flat road and a 10 km mountain pass are treated as equal, which they obviously aren’t for a cyclist. Including elevation data (e.g., a digital elevation model) to estimate actual travel effort or time would give more realistic results. Another alternative would be to use actual cycling speed or infrastructure quality as weights. As a lesson learned, always think about whether distance alone is a meaningful cost in the context of your network.</p>
+<p>The centrality analysis of the Swiss cycle network reveals spatial patterns, some more clearer than others.Degree Centrality seems very similar for many of the edges. There is not much variation and I can’t see any distinct patterns. The road sticking out the most is the “ring” in the north going around what i assume to be Basel. It has the highest degree centrality. Closeness centrality is highest on the Swiss Plateau (Mittelland), which sits more or less in the geographic center of the country and and holds a large part of the population. So both geographically and population density wise this can be expected and makes absolutely sense. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network. Similar to the degree map, betweenness has low variation with only a few single roads sticking out.</p>
+<p>One clear limitation is that we used physical edge length as the only weight and therefore factors such as steepness are not considered. Including elevation data (e.g., a digital elevation model) to estimate actual travel effort or time would give more detailed results. Another alternative would be to use actual cycling speed or infrastructure quality as weights.</p>
 </section>
 </section>
 <section id="task-2-routing" class="level2">
@@ -425,12 +424,12 @@ Projected CRS: CH1903+ / LV95</code></pre>
 </section>
 <section id="discussion-1" class="level3">
 <h3 class="anchored" data-anchor-id="discussion-1">Discussion</h3>
-<p>The map shows shortest paths by length from one origin in the south (Ticino) to five destinations spread across the country. The routes follow the Veloland network and look geographically reasonable — they take logical corridors through the Alps rather than cutting straight lines across terrain.</p>
-<p>The main limitation here is the same as in Task 1: shortest by length is not the same as easiest or fastest. A route over the Gotthard is “short” on the map but very demanding in practice. An alternative would be to use a time- or effort-based weight instead of raw distance. Another limitation is that the routing is entirely dependent on the network being complete and connected — if a real road exists but is missing from the dataset, the algorithm cannot find it. As a lesson learned, the choice of weight has a big impact on which path the algorithm picks, and it is worth thinking carefully about what “shortest” should mean in context.</p>
+<p>The routing analysis successfully computes the shortest paths from a single origin to multiple destinations across the Swiss cycle network. The visualization clearly shows the main corridors connecting the origin to various points, with some routes sharing common segments, especially those heading towards the central and eastern parts of Switzerland. The use of edge length as weights ensures that the computed paths reflect actual travel distances, which is crucial for realistic routing. However, similar to the centrality analysis, this approach does not account for factors such as elevation changes or other factors. So for this sole purpose the analysise works well, but for more detailed routing recommendations, incorporating additional data (e.g., elevation, traffic conditions, or infrastructure quality) would improve the accuracy and relevance of the routes generated.</p>
 </section>
 </section>
 <section id="use-of-ai" class="level2">
 <h2 class="anchored" data-anchor-id="use-of-ai">Use of AI</h2>
+<p>I tried to solve the tasks mostly without the help of AI, but I used Gemini correct my solutions and improve some of my code if I was stuck or unsure.</p>
 </section>
 </section>
 
