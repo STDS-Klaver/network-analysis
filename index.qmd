@@ -1,6 +1,9 @@
-# Solution for Network Analysis
-
-**Author:** Florian Klaver
+---
+title: "Solution for Network Analysis"
+author: "Florian Klaver"
+date: "2026-04-18"
+format: html
+---
 
 In this document, I solve the tasks for *network analysis* of the course *Spatiotemporal Datascience*.
 
@@ -126,7 +129,7 @@ centrality_summary
 ```{r}
 #| fig-width: 8
 #| fig-height: 14
-# Define common theme for all maps
+## Define common theme for all maps
 map_theme <- theme_void() +
   theme(
     plot.title = element_text(hjust = 0, face = "bold", size = 11, margin = margin(t = 6, b = 4)),
@@ -139,7 +142,8 @@ map_theme <- theme_void() +
     plot.margin = margin(t = 8, r = 8, b = 10, l = 8)
   )
 
-# 1. Individual plots
+## Individual plots
+# Degree Centrality
 p_degree <- ggplot(data = veloland_edges_enriched) +
   geom_sf(aes(color = degree_log1p, linewidth = degree_log1p), lineend = "round") +
   scale_color_viridis_c(option = "viridis") +
@@ -151,6 +155,7 @@ p_degree <- ggplot(data = veloland_edges_enriched) +
   coord_sf(datum = NA) +
   map_theme
 
+# Closeness Centrality
 p_closeness <- ggplot(data = veloland_edges_enriched) +
   geom_sf(aes(color = closeness, linewidth = closeness), lineend = "round") +
   scale_color_viridis_c(option = "viridis") +
@@ -162,6 +167,7 @@ p_closeness <- ggplot(data = veloland_edges_enriched) +
   coord_sf(datum = NA) +
   map_theme
 
+# Betweenness Centrality
 p_betweenness <- ggplot(data = veloland_edges_enriched) +
   geom_sf(aes(color = betweenness_log1p, linewidth = betweenness_log1p), lineend = "round") +
   scale_color_viridis_c(option = "viridis") +
@@ -173,7 +179,7 @@ p_betweenness <- ggplot(data = veloland_edges_enriched) +
   coord_sf(datum = NA) +
   map_theme
 
-# 2. Combine and render with explicit global controls
+## Combine and render
 combined_plot <- (p_degree / p_closeness / p_betweenness) +
   plot_annotation(
     title = "Swiss National Cycle Network: Edge Centrality",
@@ -184,12 +190,12 @@ combined_plot <- (p_degree / p_closeness / p_betweenness) +
     )
   )
 
-# Print the final result
+## Print the final result
 combined_plot
 ```
 
 ### Discussion
-The centrality analysis of the Swiss cycle network reveals spatial patterns, some more clearer than others.Degree Centrality seems very similar for many of the edges. There is not much variation and I can't see any distinct patterns. The road sticking out the most is the "ring" in the north going around what i assume to be Basel. It has the highest degree centrality. Closeness centrality is highest on the Swiss Plateau (Mittelland), which sits more or less in the geographic center of the country and and holds a large part of the population. So both geographically and population density wise this can be expected and makes absolutely sense. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network. Similar to the degree map, betweenness has low variation with only a few single roads sticking out.
+The centrality analysis of the Swiss cycle network reveals spatial patterns, some more clearer than others. Degree Centrality seems very similar for many of the edges. There is not much variation and I can't see any distinct patterns. The road sticking out the most is the "ring" in the north going around what i assume to be Basel. It has the highest degree centrality and must have many connections. Closeness centrality is highest on the Swiss Plateau, which sits more or less in the geographic center of the country and and holds a large part of the population. It is also visible that there the nodes more dense than for example in the southern regions where the alps are. So both geographically and population density wise this can be expected and makes absolutely sense. Betweenness highlights a handful of corridors, mainly the main east-west routes that act as bridges for the whole network (particularly the one bright yellow road running through the Swiss Plateau). Similar to the degree map, betweenness has low variation with only a few single roads sticking out.
 
 One clear limitation is that we used physical edge length as the only weight and therefore factors such as steepness are not considered. Including elevation data (e.g., a digital elevation model) to estimate actual travel effort or time would give more detailed results. Another alternative would be to use actual cycling speed or infrastructure quality as weights.
 
@@ -219,6 +225,7 @@ if (st_crs(locations) != st_crs(veloland_edges)) {
 
 # Reuse the Veloland network and edge geometries from Task 1.
 # Define origin and destination points
+# I choose the first location as origin and the rest as destinations
 origin <- locations |> slice(1)
 destination <- locations |> slice(-1) |> mutate(destination_id = row_number())
 
@@ -284,7 +291,7 @@ ggplot() +
 ```
 
 ### Discussion
-The routing analysis successfully computes the shortest paths from a single origin to multiple destinations across the Swiss cycle network. The visualization clearly shows the main corridors connecting the origin to various points, with some routes sharing common segments, especially those heading towards the central and eastern parts of Switzerland. The use of edge length as weights ensures that the computed paths reflect actual travel distances, which is crucial for realistic routing. However, similar to the centrality analysis, this approach does not account for factors such as elevation changes or other factors. So for this sole purpose the analysise works well, but for more detailed routing recommendations, incorporating additional data (e.g., elevation, traffic conditions, or infrastructure quality) would improve the accuracy and relevance of the routes generated.
+The routing analysis successfully computes the shortest paths from a single origin to multiple destinations across the Swiss cycle network. The visualization clearly shows the main corridors connecting the origin to various points, with some routes sharing common segments, especially those heading towards the central and eastern parts of Switzerland. The use of edge length as weights ensures that the computed paths reflect actual travel distances, which is crucial for realistic routing. However, similar to the centrality analysis, this approach does not account for factors such as elevation changes or other factors. So for this sole purpose the analysis works well, but for more detailed routing recommendations, incorporating additional data (e.g., elevation, traffic conditions, or infrastructure quality) would improve the accuracy and relevance of the routes generated.
 
 ## Use of AI
 I tried to solve the tasks mostly without the help of AI, but I used Gemini correct my solutions and improve some of my code if I was stuck or unsure.
